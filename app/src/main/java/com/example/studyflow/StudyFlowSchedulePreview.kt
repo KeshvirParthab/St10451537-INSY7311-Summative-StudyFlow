@@ -7,142 +7,133 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// Reusing your established premium high-fidelity colors
-val PrimaryDarkColor = Color(0xFF1A2332)
-val BackgroundCanvasGray = Color(0xFFF4F6F9)
-val CardSurfaceWhite = Color(0xFFFFFFFF)
-val AccentBlueColor = Color(0xFF3B5998)
-
-@Preview(showBackground = true, widthDp = 360, heightDp = 740)
 @Composable
-fun StudyFlowScheduleHighFiPreview() {
-    Scaffold(
-        bottomBar = { HighFiBottomNavigationBar() }
-    ) { innerPadding ->
+fun StudyFlowScheduleView() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF4F6F9))
+            .padding(16.dp)
+    ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .background(BackgroundCanvasGray)
-                .padding(innerPadding)
-                .padding(16.dp)
+                .weight(1f)
+                .fillMaxWidth()
         ) {
-            // Screen Header
             Text(
                 text = "Schedule / Calendar",
-                fontSize = 24.sp,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                color = PrimaryDarkColor
+                color = Color(0xFF1A2332),
+                modifier = Modifier.padding(top = 12.dp, bottom = 24.dp)
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            // Timeline Matrix Rows
+            ScheduleRowItem(day = "MON", title = "HCI Lecture", time = "09:00 - 11:00", iconId = android.R.drawable.ic_menu_agenda)
+            ScheduleRowItem(day = "TUE", title = "Essay Draft", time = "Anytime", iconId = android.R.drawable.ic_menu_edit)
+            ScheduleRowItem(day = "WED", title = "Group Meeting", time = "14:00 - 15:30", iconId = android.R.drawable.ic_menu_share)
 
-            // Monday Entry Card
-            HighFiScheduleItem(
-                dayLabel = "MON",
-                eventTitle = "HCI Lecture",
-                timeWindow = "09:00 - 11:00",
-                iconGlyph = "📖"
-            )
+            Spacer(modifier = Modifier.height(24.dp))
 
-            Spacer(modifier = Modifier.height(14.dp)) // Strictly managed layout spacing
-
-            // Tuesday Entry Card
-            HighFiScheduleItem(
-                dayLabel = "TUE",
-                eventTitle = "Essay Draft",
-                timeWindow = "Anytime",
-                iconGlyph = "📝"
-            )
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            // Wednesday Entry Card
-            HighFiScheduleItem(
-                dayLabel = "WED",
-                eventTitle = "Group Meeting",
-                timeWindow = "14:00 - 15:30",
-                iconGlyph = "👥"
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // Primary Navigation Add Event Button
             Button(
                 onClick = { },
-                modifier = Modifier.fillMaxWidth().height(50.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = PrimaryDarkColor),
-                shape = RoundedCornerShape(10.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1A2332)),
+                shape = RoundedCornerShape(8.dp)
             ) {
-                Text(text = "+ Add Event", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(text = "+ Add Event", fontSize = 14.sp, color = Color.White, fontWeight = FontWeight.Bold)
+            }
+        }
+
+        // Navigation Menu
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(Color.White)
+                .padding(vertical = 10.dp),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(painter = painterResource(id = android.R.drawable.ic_menu_manage), contentDescription = "Home", tint = Color(0xFF7F8C8D), modifier = Modifier.size(24.dp))
+                Text(text = "Home", fontSize = 11.sp, color = Color(0xFF7F8C8D))
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color(0xFF1A2332).copy(alpha = 0.1f))
+                    .padding(horizontal = 12.dp, vertical = 6.dp)
+            ) {
+                Icon(painter = painterResource(id = android.R.drawable.ic_menu_my_calendar), contentDescription = "Schedule", tint = Color(0xFF1A2332), modifier = Modifier.size(24.dp))
+                Text(text = "Schedule", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1A2332))
+            }
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(painter = painterResource(id = android.R.drawable.checkbox_on_background), contentDescription = "Tasks", tint = Color(0xFF7F8C8D), modifier = Modifier.size(24.dp))
+                Text(text = "Tasks", fontSize = 11.sp, color = Color(0xFF7F8C8D))
+            }
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(painter = painterResource(id = android.R.drawable.ic_menu_agenda), contentDescription = "Profile", tint = Color(0xFF7F8C8D), modifier = Modifier.size(24.dp))
+                Text(text = "Profile", fontSize = 11.sp, color = Color(0xFF7F8C8D))
             }
         }
     }
 }
 
 @Composable
-fun HighFiScheduleItem(
-    dayLabel: String,
-    eventTitle: String,
-    timeWindow: String,
-    iconGlyph: String
-) {
+fun ScheduleRowItem(day: String, title: String, time: String, iconId: Int) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Timeline Day Marker column
         Text(
-            text = dayLabel,
+            text = day,
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Gray,
-            modifier = Modifier.width(45.dp)
+            color = Color(0xFF7F8C8D),
+            modifier = Modifier.width(48.dp)
         )
-
-        // Event Detail Container Block
         Card(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.weight(1f),
             shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = CardSurfaceWhite),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
         ) {
             Row(
                 modifier = Modifier.padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // High-fidelity asset background placeholder row
-                Surface(
-                    modifier = Modifier.size(40.dp),
-                    shape = RoundedCornerShape(8.dp),
-                    color = BackgroundCanvasGray
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Text(text = iconGlyph, fontSize = 18.sp)
-                    }
-                }
-
+                Icon(
+                    painter = painterResource(id = iconId),
+                    contentDescription = null,
+                    tint = Color(0xFF1A2332),
+                    modifier = Modifier.size(24.dp)
+                )
                 Spacer(modifier = Modifier.width(16.dp))
-
                 Column {
-                    Text(
-                        text = eventTitle,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = PrimaryDarkColor
-                    )
-                    Text(
-                        text = timeWindow,
-                        fontSize = 13.sp,
-                        color = Color.Gray
-                    )
+                    Text(text = title, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1A2332))
+                    Text(text = time, fontSize = 12.sp, color = Color(0xFF7F8C8D))
                 }
             }
         }
     }
+}
+
+@Preview(showBackground = true, widthDp = 360, heightDp = 640)
+@Composable
+fun StudyFlowSchedulePreview() {
+    StudyFlowScheduleView()
 }

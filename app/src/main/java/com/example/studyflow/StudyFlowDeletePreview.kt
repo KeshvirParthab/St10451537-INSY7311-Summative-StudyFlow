@@ -8,40 +8,40 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-@Preview(showBackground = true, widthDp = 360, heightDp = 740)
 @Composable
-fun StudyFlowDeleteModalHighFiPreview() {
-    // Dark gray tint base to show the background is temporarily out of focus (Gestalt Figure-Ground)
+fun StudyFlowDeleteModalView() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0x991A2332)),
+            .background(Color(0xFF1A2332).copy(alpha = 0.6f)),
         contentAlignment = Alignment.Center
     ) {
-        // High-Fidelity Modal Dialogue Box
         Card(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(28.dp),
+                .fillMaxWidth(0.85f)
+                .wrapContentHeight(),
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
-            elevation = CardDefaults.cardElevation(defaultElevation = 16.dp)
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
         ) {
             Column(
                 modifier = Modifier.padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // High-fidelity Warning Signifier
-                Text(text = "⚠️", fontSize = 32.sp)
-
+                Icon(
+                    painter = painterResource(id = android.R.drawable.ic_dialog_alert),
+                    contentDescription = "Warning Signifier",
+                    tint = Color(0xFFE76F51),
+                    modifier = Modifier.size(40.dp)
+                )
                 Spacer(modifier = Modifier.height(16.dp))
-
                 Text(
                     text = "Delete 'Database Exam'?",
                     fontSize = 18.sp,
@@ -49,45 +49,42 @@ fun StudyFlowDeleteModalHighFiPreview() {
                     color = Color(0xFF1A2332),
                     textAlign = TextAlign.Center
                 )
-
                 Spacer(modifier = Modifier.height(8.dp))
-
                 Text(
                     text = "This action cannot be undone immediately unless you use the instant undo action step.",
                     fontSize = 13.sp,
-                    color = Color.Gray,
+                    color = Color(0xFF7F8C8D),
                     textAlign = TextAlign.Center,
                     lineHeight = 18.sp
                 )
-
                 Spacer(modifier = Modifier.height(24.dp))
-
-                // Action Layout Split Rows
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    // Secondary Cancel Button
                     OutlinedButton(
                         onClick = { },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Gray)
+                        shape = RoundedCornerShape(8.dp)
                     ) {
-                        Text(text = "Cancel", fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                        Text(text = "Cancel", color = Color(0xFF7F8C8D), fontSize = 14.sp)
                     }
-
-                    // Destructive Confirmation Button
                     Button(
                         onClick = { },
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE76F51)) // Urgent coral color highlight
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE76F51)),
+                        shape = RoundedCornerShape(8.dp)
                     ) {
-                        Text(text = "Confirm", fontSize = 14.sp, fontWeight = FontWeight.Medium, color = Color.White)
+                        Text(text = "Confirm", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
         }
     }
+}
+
+@Preview(showBackground = true, widthDp = 360, heightDp = 640)
+@Composable
+fun StudyFlowDeleteModalPreview() {
+    StudyFlowDeleteModalView()
 }
